@@ -80,7 +80,7 @@ export default class Content {
       archives: archives,
     };
 
-    let renderedFile = await ejs.renderFile(
+    const renderedFile = await ejs.renderFile(
       `${config.folders.templates.path}/${this.template}.ejs`,
       {
         model: model,
