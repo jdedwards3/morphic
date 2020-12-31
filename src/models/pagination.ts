@@ -107,8 +107,10 @@ export default class Pagination {
               layout,
               data,
               guid,
+              styles,
+              archives,
               ...apiModel
-            } = this.contentModel;
+            } = model;
 
             const apiPagePath = `${config.folders.output.path}/api/${page.slug}/index.json`;
 
