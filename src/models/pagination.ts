@@ -101,6 +101,7 @@ export default class Pagination {
               slug,
               rawContent,
               createdDate,
+              renderPath,
               modifiedDate,
               template,
               layout,

@@ -250,6 +250,7 @@ export default class Content {
               path,
               layout,
               template,
+              renderPath,
               rawContent,
               ...keep
             } = contentModel;
