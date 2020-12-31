@@ -2,7 +2,6 @@ import fs from "fs-extra";
 import IConfig from "../interfaces/IConfig.js";
 import simpleGit from "simple-git/promise.js";
 import slash from "slash";
-import { arrayReplaceAt } from "markdown-it/lib/common/utils";
 
 export default class ConfigBuilder {
   private static instance: ConfigBuilder;

@@ -13,7 +13,6 @@ import matter from "gray-matter";
 import ContentCache from "./contentCache.js";
 import { markdown } from "../utils/markdownUtil.js";
 import PathsCache from "./pathsCache.js";
-import ArchiveBuilder from "./archiveBuilder.js";
 
 const git = simpleGit(process.cwd());
 const htmlMinify = htmlMinifier.minify;

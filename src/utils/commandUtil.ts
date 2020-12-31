@@ -7,7 +7,7 @@ import ConfigBuilder from "../models/configBuilder.js";
 import chokidar from "chokidar";
 import browserSync from "browser-sync";
 import { exec as execstd } from "child_process";
-import glob, { sync } from "fast-glob";
+import glob from "fast-glob";
 import { promisify } from "util";
 import { fileURLToPath } from "url";
 import fs from "fs-extra";
