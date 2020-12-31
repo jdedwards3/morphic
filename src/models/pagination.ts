@@ -64,7 +64,7 @@ export default class Pagination {
             }
           }
 
-          let paginationPage = await ejs.renderFile(
+          const paginationPage = await ejs.renderFile(
             `${config.folders.templates.path}/${this.template}.ejs`,
             {
               model: model,
