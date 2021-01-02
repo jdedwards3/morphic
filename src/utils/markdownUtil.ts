@@ -2,6 +2,7 @@ import hljs from "highlight.js";
 import MarkdownIt from "markdown-it";
 
 const markdown: MarkdownIt = MarkdownIt({
+  html: true,
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
