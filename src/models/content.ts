@@ -173,10 +173,14 @@ export default class Content {
         archives: archives,
       };
 
-      this.content = ejs.render(this.rawContent as string, {
-        model: model,
-        config: config,
-      });
+      this.content = ejs.render(
+        this.rawContent as string,
+        {
+          model: model,
+          config: config,
+        },
+        { filename: this.path }
+      );
 
       if (this.path.endsWith(".md")) {
         this.content = markdown.render(this.content);

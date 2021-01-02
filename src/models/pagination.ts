@@ -54,10 +54,14 @@ export default class Pagination {
           };
 
           if (model.rawContent) {
-            model.content = ejs.render(model.rawContent as string, {
-              model: model,
-              config: config,
-            });
+            model.content = ejs.render(
+              model.rawContent as string,
+              {
+                model: model,
+                config: config,
+              },
+              { filename: this.contentModel.layout }
+            );
 
             if (this.path.endsWith(".md")) {
               model.content = markdown.render(model.content);
