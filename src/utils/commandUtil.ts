@@ -34,7 +34,7 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
   }
 
   const watcher = chokidar.watch(`${config.folders.site.path}**/*.{ejs,md}`, {
-    ignored: [/(^|[\/\\])\../, "node_modules"],
+    ignored: [/(^|[\/\\])\../, "node_modules", config.folders.output.path],
     persistent: true,
     ignorePermissionErrors: true,
   });
