@@ -80,8 +80,8 @@ export default class StyleBuilder {
         );
 
         StyleBuilder.instance.styles = config.folders.styles.cacheBust
-          ? `<link href="${styleOutputFolder}/${config.version}/styles.css" rel="stylesheet" />`
-          : `<link href="${styleOutputFolder}/styles.css" rel="stylesheet" />`;
+          ? `<link href="/${styleOutputFolder}/${config.version}/styles.css" rel="stylesheet" />`
+          : `<link href="/${styleOutputFolder}/styles.css" rel="stylesheet" />`;
 
         console.log("SASS output copied to styles folder.");
       }
