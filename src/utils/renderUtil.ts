@@ -28,7 +28,9 @@ async function createArchives(
             }: ${archiveKey}`;
 
             const archiveModel = new Content({
-              layout: `archives/${archive.type}`,
+              layout: archive.layout
+                ? `archives/${archive.layout}`
+                : `archives/${archive.type}`,
               title: archiveTitle,
               slug: `${slugUtil.makeSingular(
                 archive.type
