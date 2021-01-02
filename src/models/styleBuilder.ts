@@ -64,6 +64,7 @@ export default class StyleBuilder {
           file: `${config.folders.styles.path}/styles.scss`,
           outFile: `${config.folders.output.path}/${styleOutputFolder}/styles.css`,
           sourceMap: true,
+          sourceMapContents: true,
           outputStyle: "compressed",
         });
 
