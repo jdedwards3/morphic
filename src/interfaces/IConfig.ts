@@ -4,6 +4,7 @@ import IEnvironment from "./IEnvironment.js";
 export default interface IConfig {
   typescript: {
     enabled: boolean;
+    ignoreGlobs: string[];
   };
   sass: {
     enabled: boolean;

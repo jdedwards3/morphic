@@ -151,7 +151,10 @@ async function processScripts(config: IConfig, typecheck: boolean) {
 async function typeCheckScripts(config: IConfig) {
   const result = await exec(
     `npm --prefix ${__dirname}/../../../ run typeCheck-client -- ${(
-      await glob("**/*.ts", { cwd: config.folders.site.path })
+      await glob("**/*.ts", {
+        cwd: config.folders.site.path,
+        ignore: config.typescript.ignoreGlobs,
+      })
     )
       .map((path) => `${config.folders.site.path}${path}`)
       .join(" ")}`
@@ -164,7 +167,10 @@ async function typeCheckScripts(config: IConfig) {
 
 async function compileClient(config: IConfig) {
   const tsFiles = (
-    await glob("**/*.ts", { cwd: `${config.folders.site.path}` })
+    await glob("**/*.ts", {
+      cwd: `${config.folders.site.path}`,
+      ignore: config.typescript.ignoreGlobs,
+    })
   ).reduce(function (files: string[], file) {
     const filePath = dirname(file);
     if (files.indexOf(filePath) == -1 && files.indexOf(file) == -1) {
@@ -183,11 +189,15 @@ async function compileClient(config: IConfig) {
     })
   );
 
+  const ignored = config.typescript.ignoreGlobs
+    .map((item) => `${config.folders.site.path}${item}`)
+    .join(",");
+
   await exec(
     `npm --prefix ${__dirname}/../../../ run compile-client ${
       config.environment.minifyTypescriptOutput
-        ? `-- --minified ${config.folders.site.path} -d ${config.folders.output.path}`
-        : `-- ${config.folders.site.path} -d ${config.folders.output.path}`
+        ? `-- --minified ${config.folders.site.path} -d ${config.folders.output.path} --ignore ${ignored}`
+        : `-- ${config.folders.site.path} -d ${config.folders.output.path} --ignore ${ignored}`
     }`
   );
 }
