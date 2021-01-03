@@ -87,6 +87,11 @@ export default class ConfigBuilder {
         ? defaultConfig.removeFolderPrefix
         : ["pages", "posts"];
 
+      defaultConfig.typescript.ignoreGlobs = [
+        "node_modules",
+        ...(defaultConfig.typescript.ignoreGlobs || []),
+      ];
+
       ConfigBuilder.instance.config = {
         removeFolderPrefix: removeFolderPrefix,
         saveContentGuid: defaultConfig.saveContentGuid ?? { enabled: false },
