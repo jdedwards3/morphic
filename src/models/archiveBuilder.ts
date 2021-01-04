@@ -49,7 +49,7 @@ export default class ArchiveBuilder {
           ArchiveBuilder.instance.archiveTypeContentPaths![type]
         ).map((item) => ({
           name: item,
-          slug: `${slugUtil.makeSingular(type)}/${slugUtil.slugClean(item)}/`,
+          slug: `${slugUtil.makeSingular(type)}/${slugUtil.slugClean(item)}`,
         }));
         return archiveMap;
       }, {});
