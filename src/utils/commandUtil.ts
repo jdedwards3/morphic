@@ -77,7 +77,7 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
     if (config.sass.enabled && path.endsWith(".scss")) {
       await StyleBuilder.resetStyles();
       if (!config.environment.inlineSassOutput) {
-        StyleBuilder.getStyles(config);
+        await StyleBuilder.getStyles(config);
       }
     }
 
