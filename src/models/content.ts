@@ -136,7 +136,17 @@ export default class Content {
       {}
     );
 
-    Object.assign(this, fileMatter.data as IContentData, {
+    const fileData = JSON.parse(
+      ejs.render(
+        JSON.stringify(fileMatter.data),
+        { model: fileMatter.data, config: config },
+        {
+          rmWhitespace: true,
+        }
+      )
+    );
+
+    Object.assign(this, fileData as IContentData, {
       rawContent: fileMatter.content,
     });
 
