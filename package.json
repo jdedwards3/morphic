@@ -1,6 +1,6 @@
 {
   "name": "@protolith/morphic",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Node.js Static Site Generator",
   "main": "./dist/command.js",
   "type": "module",
