@@ -54,19 +54,22 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
     if (reload) {
       globalSync.pause();
     }
-    if (path.endsWith(".md") && options?.clearContent) {
+    if (
+      (path.endsWith(".md") || path.endsWith(".ejs")) &&
+      options?.clearContent
+    ) {
       ContentCache.clearContent(
         slash(path).split(`${config.folders.content.path}/`)[1]
       );
     }
 
-    if (path.endsWith(".md") && options?.clearPath) {
+    if ((path.endsWith(".md") || path.endsWith(".ejs")) && options?.clearPath) {
       PathsCache.clearPath(
         slash(path).split(`${config.folders.content.path}/`)[1]
       );
     }
 
-    if (path.endsWith(".md") && options?.addPath) {
+    if ((path.endsWith(".md") || path.endsWith(".ejs")) && options?.addPath) {
       PathsCache.addPath(
         slash(path).split(`${config.folders.content.path}/`)[1]
       );
