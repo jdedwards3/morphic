@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import IConfig from "./interfaces/IConfig.js";
-import { v4 as uuid } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 const { move, remove } = fs;
 
@@ -36,7 +36,7 @@ async function folder(
   )[1];
 
   if (folder.cacheBust) {
-    const tempFolder = uuid();
+    const tempFolder = uuidv4();
 
     await move(
       `${config.folders.output.path}/${folderRelativePath}`,
