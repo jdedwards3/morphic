@@ -172,6 +172,14 @@ export default class Content {
 
     this.slug = pathUtil.pathPretty(this.path);
 
+    if (
+      config.removeFolderPrefix.some((folderPrefix) =>
+        this.slug?.startsWith(folderPrefix)
+      )
+    ) {
+      this.slug = this.slug.slice(this.slug.indexOf("/") + 1, this.slug.length);
+    }
+
     if (!this.canonical) {
       this.canonical = `${config.environment.domain}/${
         this.slug ? this.slug + "/" : ""
