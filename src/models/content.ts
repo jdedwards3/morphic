@@ -34,6 +34,7 @@ export default class Content {
   pagination?: IPagination;
   metaDescription?: string;
   tags?: string[];
+  canonical?: string;
 
   constructor(init: { path: string });
   constructor(init: Partial<Content>);
@@ -54,6 +55,7 @@ export default class Content {
     pagination?: IPagination;
     metaDescription?: string;
     tags?: string[];
+    canonical?: string;
   }) {
     Object.assign(this, init);
     this.path = init.path;
@@ -156,6 +158,12 @@ export default class Content {
     this.modifiedDate = this.modifiedDate ?? this.createdDate;
 
     this.slug = pathUtil.pathPretty(this.path);
+
+    if (!this.canonical) {
+      this.canonical = `${config.environment.domain}/${
+        this.slug ? this.slug + "/" : ""
+      }`;
+    }
 
     this.layout = this.layout ?? "base";
 

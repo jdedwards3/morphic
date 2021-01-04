@@ -12,4 +12,5 @@ export default interface IContentData {
   pagination?: IPagination;
   createdDate?: string;
   modifiedDate?: string;
+  canonical?: string;
 }

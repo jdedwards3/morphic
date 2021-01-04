@@ -47,7 +47,10 @@ export default class Pagination {
           const model = {
             ...{
               ...this.contentModel,
-              ...{ pagination: this.paginationPages[page.number] },
+              ...{
+                pagination: this.paginationPages[page.number],
+                canonical: `${config.environment.domain}/${page.slug}/`,
+              },
             },
             styles: styles,
             archives: archives,
