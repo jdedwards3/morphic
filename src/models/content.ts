@@ -87,6 +87,9 @@ export default class Content {
       {
         model: model,
         config: config,
+      },
+      {
+        rmWhitespace: true,
       }
     );
 
@@ -187,7 +190,7 @@ export default class Content {
           model: model,
           config: config,
         },
-        { filename: this.path }
+        { filename: this.path, rmWhitespace: true }
       );
 
       if (this.path.endsWith(".md")) {
