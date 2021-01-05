@@ -82,13 +82,15 @@ export default class Pagination {
             }
           );
 
-          const filePath = page.slug
-            ? page.slug.startsWith("/")
-              ? page.slug
-              : "/" + page.slug
-            : page.slug;
+          const pageRenderPath = pathUtil.getRenderPath(config, page.slug);
 
-          const pagePath = `${config.folders.output.path}${filePath}/index.html`;
+          const filePath = pageRenderPath
+            ? pageRenderPath.startsWith("/")
+              ? pageRenderPath
+              : "/" + pageRenderPath
+            : "";
+
+          const pagePath = `${config.folders.output.path}${filePath}.html`;
 
           await fs.writeFile(
             pagePath,
@@ -122,7 +124,7 @@ export default class Pagination {
               ...apiModel
             } = model;
 
-            const apiPagePath = `${config.folders.output.path}/api/${page.slug}/index.json`;
+            const apiPagePath = `${config.folders.output.path}/api/${filePath}.json`;
 
             await fs.writeFile(apiPagePath, JSON.stringify(apiModel), "utf8");
 
