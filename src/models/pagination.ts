@@ -63,7 +63,7 @@ export default class Pagination {
                 model: model,
                 config: config,
               },
-              { filename: this.contentModel.layout, rmWhitespace: true }
+              { filename: this.contentModel.layout }
             );
 
             if (this.path.endsWith(".md")) {
@@ -76,9 +76,6 @@ export default class Pagination {
             {
               model: model,
               config: config,
-            },
-            {
-              rmWhitespace: true,
             }
           );
 

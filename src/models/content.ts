@@ -87,9 +87,6 @@ export default class Content {
       {
         model: model,
         config: config,
-      },
-      {
-        rmWhitespace: true,
       }
     );
 
@@ -144,13 +141,10 @@ export default class Content {
     );
 
     const fileData = JSON.parse(
-      ejs.render(
-        JSON.stringify(fileMatter.data),
-        { model: fileMatter.data, config: config },
-        {
-          rmWhitespace: true,
-        }
-      )
+      ejs.render(JSON.stringify(fileMatter.data), {
+        model: fileMatter.data,
+        config: config,
+      })
     );
 
     Object.assign(this, fileData as IContentData, {
@@ -215,7 +209,7 @@ export default class Content {
           model: model,
           config: config,
         },
-        { filename: this.path, rmWhitespace: true }
+        { filename: this.path }
       );
 
       if (this.path.endsWith(".md")) {
