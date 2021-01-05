@@ -23,7 +23,8 @@ const pathClean = (path: string) =>
     path.lastIndexOf(".") == -1 ? path.length : path.lastIndexOf(".")
   );
 
-const pathPretty = (path: string) => `${pathClean(path.replace("index", ""))}`;
+const pathPretty = (path: string) =>
+  `${pathClean(path.replace("/index", "").replace("index", ""))}`;
 
 const isIndex = (path: string) => pathClean(path).endsWith("index");
 
