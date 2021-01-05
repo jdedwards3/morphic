@@ -53,6 +53,8 @@ async function createArchives(
               contentModel: archiveModel,
             });
 
+            pagination.build(config);
+
             await pagination.render(config, styles, archives);
           }
         )
@@ -82,6 +84,8 @@ async function createContent(
             template: contentModel.template as string,
             contentModel: contentModel,
           });
+
+          pagination.build(config);
 
           await pagination.render(config, styles, archives);
         } else {

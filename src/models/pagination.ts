@@ -14,10 +14,12 @@ import PathsCache from "./pathsCache.js";
 const htmlMinify = htmlMinifier.minify;
 
 export default class Pagination {
-  pages: IPage[];
+  private pages: IPage[];
   private contentModel: Partial<Content>;
   private path: string;
   private template: string;
+  private data: {}[];
+  private pageSize: number;
   private paginationPages: { [pageNumber: number]: IPagination };
 
   constructor(init: {
@@ -29,9 +31,14 @@ export default class Pagination {
   }) {
     this.contentModel = init.contentModel;
     this.path = init.path;
+    this.data = init.data;
     this.template = init.template;
-    this.pages = this.buildPages(init.path, init.data, init.pageSize);
-    this.paginationPages = this.buildPagination();
+    this.pageSize = init.pageSize ?? -1;
+    if (this.pageSize == -1) {
+      this.pageSize = this.data.length;
+    }
+    this.pages = [];
+    this.paginationPages = {};
   }
 
   async render(
@@ -132,7 +139,7 @@ export default class Pagination {
     }
   }
 
-  private buildPagination() {
+  private buildPages() {
     const paginationPages: { [index: number]: IPagination } = {};
 
     for (const pageChunk of siteUtil.chunkItems(this.pages)) {
@@ -193,20 +200,22 @@ export default class Pagination {
     return paginationPages;
   }
 
-  private buildPages(path: string, data: {}[], pageSize: number): IPage[] {
-    pageSize = pageSize ?? -1;
-    if (pageSize == -1) {
-      pageSize = data.length;
-    }
-    return Array.from(Array(Math.ceil(data.length / pageSize)), (_, index) => ({
-      slug: index
-        ? `${pathUtil.pathPretty(path)}/page/${index + 1}`
-        : `${pathUtil.pathPretty(path)}`,
-      number: index + 1,
-      pageData: data.slice(
-        index ? pageSize * index : 0,
-        index ? pageSize * (index + 1) : pageSize
-      ),
-    }));
+  build(config: IConfig) {
+    this.pages = Array.from(
+      Array(Math.ceil(this.data.length / this.pageSize)),
+      (_, index) => ({
+        slug: index
+          ? `${pathUtil.pathPretty(
+              pathUtil.getRenderPath(config, this.path)
+            )}/page/${index + 1}`
+          : `${pathUtil.pathPretty(pathUtil.getRenderPath(config, this.path))}`,
+        number: index + 1,
+        pageData: this.data.slice(
+          index ? this.pageSize * index : 0,
+          index ? this.pageSize * (index + 1) : this.pageSize
+        ),
+      })
+    );
+    this.paginationPages = this.buildPages();
   }
 }
