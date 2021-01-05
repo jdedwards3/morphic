@@ -111,7 +111,14 @@ export default class Content {
     PathsCache.clearOutputPath(filePath);
 
     if (config.environment.jsonApi) {
-      const { layout, template, path, rawContent, ...apiModel } = this;
+      const {
+        layout,
+        template,
+        path,
+        rawContent,
+        renderPath,
+        ...apiModel
+      } = this;
 
       if (config.environment.minifyHtml) {
         apiModel.content = htmlMinify(apiModel.content as string, {
