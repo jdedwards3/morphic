@@ -41,6 +41,11 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
 
   if (config.typescript.enabled) {
     watcher.add(`${config.folders.site.path}**/*.ts`);
+    watcher.unwatch(
+      config.typescript.ignoreGlobs.map(
+        (item) => `${config.folders.site.path}${item}`
+      )
+    );
   }
 
   if (config.sass.enabled) {
