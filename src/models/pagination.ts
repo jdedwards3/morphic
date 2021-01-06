@@ -203,18 +203,26 @@ export default class Pagination {
   build(config: IConfig) {
     this.pages = Array.from(
       Array(Math.ceil(this.data.length / this.pageSize)),
-      (_, index) => ({
-        slug: index
+      (_, index) => {
+        const slug = index
           ? `${pathUtil.pathPretty(
               pathUtil.getRenderPath(config, this.path)
             )}/page/${index + 1}`
-          : `${pathUtil.pathPretty(pathUtil.getRenderPath(config, this.path))}`,
-        number: index + 1,
-        pageData: this.data.slice(
-          index ? this.pageSize * index : 0,
-          index ? this.pageSize * (index + 1) : this.pageSize
-        ),
-      })
+          : `${pathUtil.pathPretty(pathUtil.getRenderPath(config, this.path))}`;
+
+        return {
+          slug: slug
+            ? slug.startsWith("/")
+              ? slug.slice(1, slug.length)
+              : slug
+            : "",
+          number: index + 1,
+          pageData: this.data.slice(
+            index ? this.pageSize * index : 0,
+            index ? this.pageSize * (index + 1) : this.pageSize
+          ),
+        };
+      }
     );
     this.paginationPages = this.buildPages();
   }
