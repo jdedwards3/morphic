@@ -15,7 +15,10 @@ export default interface IConfig {
       | { path: string }
       | { path: string; copyToOutput?: boolean }
       | { path: string; copyToOutput?: boolean; cacheBust?: boolean };
-    content: { path: string };
+    content: {
+      path: string;
+      rootFiles: { path: string; copyToOutput: boolean };
+    };
     data: { path: string };
     templates: { path: string };
     layouts: { path: string };

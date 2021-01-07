@@ -36,6 +36,11 @@ export default class ConfigBuilder {
         defaultConfig.folders.content
       );
 
+      defaultConfig.folders.content.rootFiles = Object.assign(
+        { path: "rootFiles", copyToOutput: false },
+        defaultConfig.folders.content.rootFiles
+      );
+
       defaultConfig.folders.data = Object.assign(
         { path: "data" },
         defaultConfig.folders.data

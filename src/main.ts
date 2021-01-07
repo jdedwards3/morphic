@@ -67,6 +67,14 @@ async function main(config: IConfig) {
     await siteUtil.createRssFeed(config, contentPaths, archiveTypeDisplayMap);
   }
 
+  if (config.folders.content.rootFiles.copyToOutput) {
+    await fs.copy(
+      `${config.folders.content.path}/${config.folders.content.rootFiles.path}`,
+      `${config.folders.output.path}/`,
+      { overwrite: true }
+    );
+  }
+
   await siteUtil.cleanOldOutputFiles(config);
 
   //todo: add dynamic folder support
