@@ -4,10 +4,7 @@
   "description": "Node.js Static Site Generator",
   "main": "./dist/command.js",
   "type": "module",
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/protolith"
-  },
+  "funding": "https://github.com/sponsors/jdedwards3",
   "author": "James Edwards <james@jamesedwards.net> (https://www.jamesedwards.net/)",
   "repository": {
     "type": "git",
