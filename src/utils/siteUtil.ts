@@ -241,7 +241,7 @@ async function createSitemap(
           url: [
             {
               loc: `${config.environment.domain}/${
-                pathUtil.pathPretty(path) ? `${pathUtil.pathPretty(path)}/` : ""
+                contentModel.slug ? `${contentModel.slug}/` : ""
               }`,
             },
             {
