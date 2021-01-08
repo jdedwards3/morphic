@@ -171,15 +171,7 @@ export default class Content {
 
     this.modifiedDate = this.modifiedDate ?? this.createdDate;
 
-    this.slug = pathUtil.pathPretty(this.path);
-
-    if (
-      config.removeFolderPrefix.some((folderPrefix) =>
-        this.slug?.startsWith(folderPrefix)
-      )
-    ) {
-      this.slug = this.slug.slice(this.slug.indexOf("/") + 1, this.slug.length);
-    }
+    this.slug = pathUtil.pathPretty(pathUtil.getRenderPath(config, this.path));
 
     if (!this.canonical) {
       this.canonical = `${config.environment.domain}/${
