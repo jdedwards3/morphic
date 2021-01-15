@@ -204,8 +204,8 @@ async function compileClient(config: IConfig) {
   await exec(
     `npm --prefix ${__dirname}/../../../ run compile-client ${
       config.environment.minifyTypescriptOutput
-        ? `-- --minified ${config.folders.site.path} -d ${config.folders.output.path} --ignore ${ignored}`
-        : `-- ${config.folders.site.path} -d ${config.folders.output.path} --ignore ${ignored}`
+        ? `-- --minified --ignore ${ignored} ${config.folders.site.path} -d ${config.folders.output.path}`
+        : `-- --ignore ${ignored} ${config.folders.site.path} -d ${config.folders.output.path}`
     }`
   );
 }
