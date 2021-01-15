@@ -291,9 +291,7 @@ export default class Content {
         new Date(
           (second.modifiedDate ?? second.createdDate) as string
         ).getTime() -
-        new Date(
-          second.modifiedDate ?? (second.createdDate as string)
-        ).getTime()
+        new Date(first.modifiedDate ?? (first.createdDate as string)).getTime()
     );
 
     return posts;
