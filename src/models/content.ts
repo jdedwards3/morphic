@@ -288,8 +288,12 @@ export default class Content {
 
     posts.sort(
       (first: Partial<Content>, second: Partial<Content>) =>
-        new Date(second.createdDate as string).getTime() -
-        new Date(first.createdDate as string).getTime()
+        new Date(
+          (second.modifiedDate ?? second.createdDate) as string
+        ).getTime() -
+        new Date(
+          second.modifiedDate ?? (second.createdDate as string)
+        ).getTime()
     );
 
     return posts;
