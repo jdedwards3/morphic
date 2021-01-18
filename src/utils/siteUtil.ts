@@ -105,17 +105,15 @@ async function buildFeed(
             decodeEntities: false,
           });
 
-          $.root()
-            .find("a[href^='/']")
-            .each(function (this: cheerio.Element) {
-              const $this = $(this);
-              $this.attr(
-                "href",
-                `${config.environment.domain}${$this.attr("href")}`
-              );
-            });
+          $("a[href^='/']").each(function (this: cheerio.Element) {
+            const $this = $(this);
+            $this.attr(
+              "href",
+              `${config.environment.domain}${$this.attr("href")}`
+            );
+          });
 
-          const description = $.root().find("body").html() as string;
+          const description = $("body").html() as string;
 
           const feedItem = {
             item: [
