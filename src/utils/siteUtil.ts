@@ -109,10 +109,18 @@ async function buildFeed(
             this: cheerio.Element
           ) {
             const $this = $(this);
-            $this.attr(
-              "href",
-              `${config.environment.domain}${$this.attr("href")}`
-            );
+            if ($this.attr("href")) {
+              $this.attr(
+                "href",
+                `${config.environment.domain}${$this.attr("href")}`
+              );
+            }
+            if ($this.attr("src")) {
+              $this.attr(
+                "src",
+                `${config.environment.domain}${$this.attr("src")}`
+              );
+            }
           });
 
           const description = $("body").html() as string;
