@@ -105,7 +105,9 @@ async function buildFeed(
             decodeEntities: false,
           });
 
-          $("a[href^='/']").each(function (this: cheerio.Element) {
+          $("a[href^='/'], img[src^='/']").each(function (
+            this: cheerio.Element
+          ) {
             const $this = $(this);
             $this.attr(
               "href",
