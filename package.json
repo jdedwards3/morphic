@@ -38,7 +38,8 @@
     "clean": "rimraf dist",
     "compile": "cross-env-shell babel src -d dist --source-maps --extensions '.ts'",
     "build": "npm run clean && npm run compile",
-    "build-typecheck": "npm run typecheck && npm run build"
+    "build-typecheck": "npm run typecheck && npm run build",
+    "prepublishOnly": "npm run build-typecheck"
   },
   "devDependencies": {
     "@types/browser-sync": "^2.26.1",
