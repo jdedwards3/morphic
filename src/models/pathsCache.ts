@@ -75,6 +75,7 @@ export default class PathsCache {
     if (!PathsCache.instance.outputPaths) {
       throw new Error("Output paths must be cached before using.");
     }
+
     if (
       PathsCache.instance.outputPaths &&
       PathsCache.instance.outputPaths.indexOf(path) > -1
@@ -91,44 +92,42 @@ export default class PathsCache {
       PathsCache.initialize();
     }
 
-    if (!PathsCache.instance.outputPaths) {
-      const filePatterns = [
-        `${config.folders.output.path}/**/*.html`,
-        `${config.folders.output.path}/api/**/*.json`,
-        `${config.folders.output.path}/*.*`,
+    const filePatterns = [
+      `${config.folders.output.path}/**/*.html`,
+      `${config.folders.output.path}/api/**/*.json`,
+      `${config.folders.output.path}/*.*`,
+    ];
+
+    const contentRootFiles = await glob("*", {
+      cwd: `${config.folders.content.path}/${config.folders.content.rootFiles.path}`,
+    });
+
+    let compiledScripts: string[] = [];
+    if (config.typescript.enabled) {
+      compiledScripts = [
+        `${config.folders.output.path}/**/*.js`,
+        `${config.folders.output.path}/**/*.js.map`,
       ];
-
-      const contentRootFiles = await glob("*", {
-        cwd: `${config.folders.content.path}/${config.folders.content.rootFiles.path}`,
-      });
-
-      let compiledScripts: string[] = [];
-      if (config.typescript.enabled) {
-        compiledScripts = [
-          `${config.folders.output.path}/**/*.js`,
-          `${config.folders.output.path}/**/*.js.map`,
-        ];
-      }
-
-      let compiledStyles: string[] = [];
-      if (config.sass.enabled) {
-        compiledStyles = [
-          `${config.folders.output.path}/**/*.css`,
-          `${config.folders.output.path}/**/*.css.map`,
-        ];
-      }
-
-      PathsCache.instance.outputPaths = await glob(filePatterns, {
-        cwd: `${config.folders.site.path}`,
-        ignore: [
-          ...compiledScripts,
-          ...compiledStyles,
-          ...contentRootFiles.map(
-            (item) => `${config.folders.output.path}/${item}`
-          ),
-        ],
-      });
     }
+
+    let compiledStyles: string[] = [];
+    if (config.sass.enabled) {
+      compiledStyles = [
+        `${config.folders.output.path}/**/*.css`,
+        `${config.folders.output.path}/**/*.css.map`,
+      ];
+    }
+
+    PathsCache.instance.outputPaths = await glob(filePatterns, {
+      cwd: `${config.folders.site.path}`,
+      ignore: [
+        ...compiledScripts,
+        ...compiledStyles,
+        ...contentRootFiles.map(
+          (item) => `${config.folders.output.path}/${item}`
+        ),
+      ],
+    });
   }
 
   static getOutputPaths() {
