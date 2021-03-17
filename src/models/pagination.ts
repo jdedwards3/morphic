@@ -131,7 +131,7 @@ export default class Pagination {
               ...apiModel
             } = model;
 
-            const apiPagePath = `${config.folders.output.path}/api/${filePath}.json`;
+            const apiPagePath = `${config.folders.output.path}/api${filePath}.json`;
 
             await fs.writeFile(apiPagePath, JSON.stringify(apiModel), "utf8");
 
