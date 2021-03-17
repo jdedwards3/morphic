@@ -2,7 +2,6 @@ import fs from "fs-extra";
 import { pathUtil } from "../utils/pathUtil.js";
 import IPagination from "../interfaces/IPagination.js";
 import htmlMinifier from "html-minifier";
-import simpleGit from "simple-git/promise.js";
 import IContentData from "../interfaces/IContentData.js";
 import DataCache from "./dataCache.js";
 import IConfig from "../interfaces/IConfig.js";
@@ -13,8 +12,8 @@ import matter from "gray-matter";
 import ContentCache from "./contentCache.js";
 import { markdown } from "../utils/markdownUtil.js";
 import PathsCache from "./pathsCache.js";
+import GitLogCache from "./gitLogCache.js";
 
-const git = simpleGit(process.cwd());
 const htmlMinify = htmlMinifier.minify;
 
 export default class Content {
@@ -156,9 +155,7 @@ export default class Content {
       !this.modifiedDate &&
       !this.createdDate
     ) {
-      const log = await git.log({
-        file: `${config.folders.content.path}/${this.path}`,
-      });
+      const log = await GitLogCache.getLog(config, this.path);
 
       this.createdDate = new Date(
         log.all.slice(-1)[0].date
