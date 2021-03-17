@@ -32,7 +32,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "typeCheck-client": "tsc --allowSyntheticDefaultImports --moduleResolution node --skipLibCheck --noEmit --strict --lib ES2019,ES6,DOM,WebWorker",
+    "typeCheck-client": "tsc --allowSyntheticDefaultImports --isolatedModules --moduleResolution node --skipLibCheck --noEmit --strict --lib ES2019,ES6,DOM,WebWorker",
     "compile-client": "cross-env-shell babel --no-babelrc --presets=@babel/preset-typescript --extensions '.ts' --no-comments --source-maps",
     "typecheck": "tsc --p .",
     "clean": "rimraf dist",
