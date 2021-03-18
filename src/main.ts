@@ -108,7 +108,7 @@ async function main(config: IConfig) {
     );
   }
 
-  if (!config.typescript.enabled && config.folders.styles.copyToOutput) {
+  if (!config.typescript.enabled && config.folders.scripts.copyToOutput) {
     await fs.copy(
       `${config.folders.scripts.path}`,
       `${config.folders.output.path}/${
