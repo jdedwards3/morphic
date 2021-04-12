@@ -1,5 +1,12 @@
 const slugClean = (slug: string) =>
-  slug.split(" ").join("").split(".").join("").toLowerCase();
+  slug
+    .split(" ")
+    .join("")
+    .split(".")
+    .join("")
+    .split("/")
+    .join("")
+    .toLowerCase();
 
 const makeSingular = (item: string) =>
   item.endsWith("s") ? item.slice(0, -1) : item;
