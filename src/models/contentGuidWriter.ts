@@ -23,7 +23,7 @@ export default class ContentGuidWriter {
         paths.map(async (path: string) => {
           const fileMatter = matter(
             await ContentCache.getContent(config, path),
-            {}
+            { excerpt: true, excerpt_separator: "<!-- end -->" }
           );
 
           if (!fileMatter.data.guid) {

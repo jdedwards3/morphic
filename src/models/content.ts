@@ -20,7 +20,9 @@ export default class Content {
   path: string;
   renderPath?: string;
   rawContent?: string;
+  rawExcerpt?: string;
   content?: string;
+  excerpt?: string;
   guid?: string;
   title?: string;
   createdDate?: string;
@@ -41,7 +43,9 @@ export default class Content {
     path: string;
     renderPath: string;
     rawContent?: string;
+    rawExcerpt?: string;
     content?: string;
+    excerpt?: string;
     guid?: string;
     title?: string;
     createdDate?: string;
@@ -114,6 +118,7 @@ export default class Content {
         template,
         path,
         rawContent,
+        rawExcerpt,
         renderPath,
         ...apiModel
       } = this;
@@ -138,7 +143,7 @@ export default class Content {
   async build(config: IConfig, archives?: IArchiveTypeDisplayMap) {
     const fileMatter = matter(
       await ContentCache.getContent(config, this.path),
-      {}
+      { excerpt_separator: "<!-- end -->" }
     );
 
     const fileData = JSON.parse(
@@ -150,6 +155,7 @@ export default class Content {
 
     Object.assign(this, fileData as IContentData, {
       rawContent: fileMatter.content,
+      rawExcerpt: fileMatter.excerpt,
     });
 
     if (
@@ -194,6 +200,24 @@ export default class Content {
         archives: archives,
       };
 
+      if (this.rawExcerpt) {
+        this.excerpt = ejs.render(
+          this.rawExcerpt as string,
+          {
+            model: model,
+            config: config,
+          },
+          { filename: this.path }
+        );
+
+        if (this.path.endsWith(".md")) {
+          if (this.excerpt) {
+            this.excerpt = markdown.render(this.excerpt);
+          }
+        }
+        model.excerpt = this.excerpt;
+      }
+
       this.content = ejs.render(
         this.rawContent as string,
         {
@@ -204,7 +228,11 @@ export default class Content {
       );
 
       if (this.path.endsWith(".md")) {
-        this.content = markdown.render(this.content);
+        this.content = markdown.render(
+          this.content.indexOf("<!-- end -->") == -1
+            ? this.content
+            : this.content.split("<!-- end -->")[1]
+        );
       }
 
       if (config.environment.minifyHtml) {
