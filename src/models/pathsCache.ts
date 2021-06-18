@@ -98,8 +98,8 @@ export default class PathsCache {
       `${config.folders.output.path}/*.*`,
     ];
 
-    const contentRootFiles = await glob("*", {
-      cwd: `${config.folders.content.path}/${config.folders.content.rootFiles.path}`,
+    const rootFiles = await glob("*", {
+      cwd: `${config.folders.rootFiles.path}`,
     });
 
     let compiledScripts: string[] = [];
@@ -125,9 +125,7 @@ export default class PathsCache {
       ignore: [
         ...compiledScripts,
         ...compiledStyles,
-        ...contentRootFiles.map(
-          (item) => `${config.folders.output.path}/${item}`
-        ),
+        ...rootFiles.map((item) => `${config.folders.output.path}/${item}`),
       ],
     });
   }
