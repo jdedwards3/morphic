@@ -8,16 +8,19 @@ import IArchiveType from "./interfaces/IArchiveType.js";
 import fs from "fs-extra";
 import IConfig from "./interfaces/IConfig.js";
 import ContentGuidWriter from "./models/contentGuidWriter.js";
+import ServiceWorkerBuilder from "./models/serviceWorkerBuilder.js";
 
 async function main(config: IConfig) {
   await fs.mkdirs(`${config.folders.output.path}`);
 
-  // scan output folder to delete old files after build
   await pathUtil.cacheOutputPaths(config);
 
   const contentPaths = await pathUtil.getPaths(config);
 
   const styles = (await StyleBuilder.getStyles(config)) as string;
+
+  const serviceWorkerRegistration =
+    (await ServiceWorkerBuilder.getServiceWorkerRegistration(config)) as string;
 
   if (config.saveContentGuid.enabled) {
     await ContentGuidWriter.saveIfNotExists(config, contentPaths);
@@ -33,6 +36,7 @@ async function main(config: IConfig) {
   await renderUtil.createContent(
     config,
     styles,
+    serviceWorkerRegistration,
     archiveTypeDisplayMap,
     contentPaths
   );
@@ -49,6 +53,7 @@ async function main(config: IConfig) {
     await renderUtil.createArchives(
       config,
       styles,
+      serviceWorkerRegistration,
       archiveTypeDisplayMap,
       archiveTypeContentPaths
     );

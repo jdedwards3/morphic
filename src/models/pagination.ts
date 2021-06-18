@@ -44,6 +44,7 @@ export default class Pagination {
   async render(
     config: IConfig,
     styles: string,
+    serviceWorkerRegistration: string,
     archives: IArchiveTypeDisplayMap
   ) {
     for (const pageChunk of siteUtil.chunkItems(this.pages)) {
@@ -63,6 +64,7 @@ export default class Pagination {
               },
             },
             styles: styles,
+            serviceWorkerRegistration,
             archives: archives,
           };
 
@@ -127,6 +129,7 @@ export default class Pagination {
               data,
               guid,
               styles,
+              serviceWorkerRegistration,
               archives,
               ...apiModel
             } = model;

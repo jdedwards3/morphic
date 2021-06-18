@@ -6,4 +6,5 @@ export default interface IEnvironment {
   jsonApi: boolean;
   rssFeed: boolean;
   sitemap: boolean;
+  serviceWorker: { enabled: boolean };
 }

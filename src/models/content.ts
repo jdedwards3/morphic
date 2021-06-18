@@ -71,6 +71,7 @@ export default class Content {
   async render(
     config: IConfig,
     styles: string,
+    serviceWorkerRegistration: string,
     archives: IArchiveTypeDisplayMap
   ): Promise<void | string> {
     await pathUtil.createOutputFolders(this.path as string, config);
@@ -78,6 +79,7 @@ export default class Content {
     const model = {
       ...this,
       styles: styles,
+      serviceWorkerRegistration: serviceWorkerRegistration,
       archives: archives,
     };
 

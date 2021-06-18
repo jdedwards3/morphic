@@ -10,6 +10,7 @@ import { siteUtil } from "./siteUtil.js";
 async function createArchives(
   config: IConfig,
   styles: string,
+  serviceWorkerRegistration: string,
   archives: IArchiveTypeDisplayMap,
   archiveTypeContentPaths: IArchiveType
 ) {
@@ -55,7 +56,12 @@ async function createArchives(
 
             pagination.build(config);
 
-            await pagination.render(config, styles, archives);
+            await pagination.render(
+              config,
+              styles,
+              serviceWorkerRegistration,
+              archives
+            );
           }
         )
       );
@@ -66,6 +72,7 @@ async function createArchives(
 async function createContent(
   config: IConfig,
   styles: string,
+  serviceWorkerRegistration: string,
   archives: IArchiveTypeDisplayMap,
   paths: string[]
 ) {
@@ -87,11 +94,17 @@ async function createContent(
 
           pagination.build(config);
 
-          await pagination.render(config, styles, archives);
+          await pagination.render(
+            config,
+            styles,
+            serviceWorkerRegistration,
+            archives
+          );
         } else {
           await contentModel.render(
             config,
             styles,
+            serviceWorkerRegistration,
             archives as IArchiveTypeDisplayMap
           );
         }
