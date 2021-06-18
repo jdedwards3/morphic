@@ -1,5 +1,6 @@
 import IArchiveData from "./IArchiveData.js";
 import IEnvironment from "./IEnvironment.js";
+import IFolder from "./IFolder.js";
 
 export default interface IConfig {
   typescript: {
@@ -11,23 +12,18 @@ export default interface IConfig {
   };
   saveContentGuid: { enabled: boolean };
   folders: {
-    [index: string]:
-      | { path: string }
-      | { path: string; copyToOutput?: boolean }
-      | { path: string; copyToOutput?: boolean; cacheBust?: boolean };
-    content: {
-      path: string;
-      rootFiles: { path: string; copyToOutput: boolean };
-    };
-    data: { path: string };
-    templates: { path: string };
-    layouts: { path: string };
-    assets: { path: string; copyToOutput: boolean };
-    images: { path: string; copyToOutput: boolean };
-    scripts: { path: string; copyToOutput: boolean; cacheBust: boolean };
-    styles: { path: string; copyToOutput: boolean; cacheBust: boolean };
-    output: { path: string };
-    site: { path: string };
+    [index: string]: IFolder;
+    rootFiles: IFolder;
+    content: IFolder;
+    data: IFolder;
+    templates: IFolder;
+    layouts: IFolder;
+    assets: IFolder;
+    images: IFolder;
+    scripts: IFolder;
+    styles: IFolder;
+    output: IFolder;
+    site: IFolder;
   };
   removeFolderPrefix: string[];
   environment: IEnvironment;
