@@ -22,11 +22,7 @@ async function all(config: IConfig) {
     await folder(config, config.folders.styles);
   }
 
-  for (const key of Object.keys(config.folders)) {
-    if (config.folders[key].cacheBust) {
-      await folder(config, config.folders[key] as any);
-    }
-  }
+  //todo: cachebust other folders if indicated in config
 }
 
 async function folder(config: IConfig, folder: IFolder) {
