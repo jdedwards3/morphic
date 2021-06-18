@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import IConfig from "../interfaces/IConfig.js";
 import simpleGit from "simple-git/promise.js";
 import slash from "slash";
+import IFolder from "../interfaces/IFolder.js";
 
 export default class ConfigBuilder {
   private static instance: ConfigBuilder;
@@ -27,63 +28,49 @@ export default class ConfigBuilder {
         (defaultConfig.folders as any) = {};
       }
 
-      //todo: add dynamic folder support
-
-      defaultConfig.folders.content = Object.assign(
-        {
-          path: "content",
+      const defaultFolders: {
+        [index: string]: IFolder;
+      } = {
+        rootFiles: { path: "rootFiles" },
+        content: { path: "content" },
+        data: { path: "data" },
+        templates: { path: "templates" },
+        layouts: { path: "layouts" },
+        assets: { path: "assets", copyToOutput: false },
+        images: { path: "images", copyToOutput: false },
+        scripts: {
+          path: "scripts",
+          copyToOutput: false,
+          cacheBust: false,
         },
-        defaultConfig.folders.content
-      );
+        styles: {
+          path: "styles",
+          copyToOutput: false,
+          cacheBust: false,
+        },
+      };
 
-      defaultConfig.folders.content.rootFiles = Object.assign(
-        { path: "rootFiles", copyToOutput: false },
-        defaultConfig.folders.content.rootFiles
-      );
+      Object.keys(defaultConfig.folders).forEach((key) => {
+        defaultConfig.folders[key] = Object.assign(
+          defaultFolders[key],
+          defaultConfig.folders[key]
+        );
 
-      defaultConfig.folders.data = Object.assign(
-        { path: "data" },
-        defaultConfig.folders.data
-      );
+        defaultConfig.folders[key].path = slash(
+          `${siteFolder}${defaultConfig.folders[key].path}`
+        );
+      });
 
-      defaultConfig.folders.templates = Object.assign(
-        { path: "templates" },
-        defaultConfig.folders.templates
-      );
-
-      defaultConfig.folders.layouts = Object.assign(
-        { path: "layouts" },
-        defaultConfig.folders.layouts
-      );
-
-      defaultConfig.folders.assets = Object.assign(
-        { path: "assets", copyToOutput: false },
-        defaultConfig.folders.assets
-      );
-
-      defaultConfig.folders.images = Object.assign(
-        { path: "images", copyToOutput: false },
-        defaultConfig.folders.images
-      );
-
-      defaultConfig.folders.scripts = Object.assign(
-        { path: "scripts", copyToOutput: false, cacheBust: false },
-        defaultConfig.folders.scripts
-      );
-
-      defaultConfig.folders.styles = Object.assign(
-        { path: "styles", copyToOutput: false, cacheBust: false },
-        defaultConfig.folders.styles
-      );
-
-      Object.keys(defaultConfig.folders).forEach(
-        (key) =>
-          (defaultConfig.folders[key].path = slash(
-            `${siteFolder}${defaultConfig.folders[key].path}`
-          ))
-      );
+      Object.keys(defaultFolders).forEach((key) => {
+        if (!defaultConfig.folders[key]) {
+          defaultFolders[key].path = slash(
+            `${siteFolder}${defaultFolders[key].path}`
+          );
+        }
+      });
 
       const folders = {
+        ...defaultFolders,
         ...defaultConfig.folders,
         ...{ output: { path: outputFolder }, site: { path: siteFolder } },
       };

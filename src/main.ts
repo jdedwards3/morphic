@@ -72,33 +72,10 @@ async function main(config: IConfig) {
     await siteUtil.createRssFeed(config, contentPaths, archiveTypeDisplayMap);
   }
 
-  if (config.folders.content.rootFiles.copyToOutput) {
+  if (config.folders.rootFiles) {
     await fs.copy(
-      `${config.folders.content.path}/${config.folders.content.rootFiles.path}`,
+      `${config.folders.rootFiles.path}`,
       `${config.folders.output.path}/`,
-      { overwrite: true }
-    );
-  }
-
-  await siteUtil.cleanOldOutputFiles(config);
-
-  //todo: add dynamic folder support
-  if (config.folders.assets.copyToOutput) {
-    await fs.copy(
-      `${config.folders.assets.path}`,
-      `${config.folders.output.path}/${
-        config.folders.assets.path.split(config.folders.site.path)[1]
-      }`,
-      { overwrite: true }
-    );
-  }
-
-  if (config.folders.images.copyToOutput) {
-    await fs.copy(
-      `${config.folders.images.path}`,
-      `${config.folders.output.path}/${
-        config.folders.images.path.split(config.folders.site.path)[1]
-      }`,
       { overwrite: true }
     );
   }
@@ -122,6 +99,21 @@ async function main(config: IConfig) {
       { overwrite: true }
     );
   }
+
+  for (const folder of Object.keys(config.folders)) {
+    if (config.folders[folder].copyToOutput) {
+      await fs.copy(
+        `${config.folders[folder].path}`,
+        `${config.folders.output.path}/${
+          config.folders[folder].path.split(config.folders.site.path)[1]
+        }`,
+        { overwrite: true }
+      );
+    }
+  }
+
+  await siteUtil.cleanOldOutputFiles(config);
+
   console.log("Files Generated.");
 }
 

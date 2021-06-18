@@ -1,11 +1,11 @@
 import fs from "fs-extra";
 import IConfig from "./interfaces/IConfig.js";
 import { v4 as uuidv4 } from "uuid";
+import IFolder from "./interfaces/IFolder.js";
 
 const { move, remove } = fs;
 
 async function all(config: IConfig) {
-  //todo: add dynamic folder support
   if (
     (config.typescript.enabled && config.folders.scripts.cacheBust) ||
     (config.folders.scripts.copyToOutput && config.folders.scripts.cacheBust)
@@ -21,16 +21,15 @@ async function all(config: IConfig) {
   ) {
     await folder(config, config.folders.styles);
   }
+
+  for (const key of Object.keys(config.folders)) {
+    if (config.folders[key].cacheBust) {
+      await folder(config, config.folders[key] as any);
+    }
+  }
 }
 
-async function folder(
-  config: IConfig,
-  folder: {
-    path: string;
-    copyToOutput: boolean;
-    cacheBust: boolean;
-  }
-) {
+async function folder(config: IConfig, folder: IFolder) {
   const folderRelativePath = folder.path.split(
     `${config.folders.site.path}`
   )[1];
