@@ -397,6 +397,14 @@ async function cleanOldOutputFiles(config: IConfig) {
     })
   );
 
+  if (!config.typescript.enabled && !config.folders.scripts.copyToOutput) {
+    await fs.remove(
+      `${config.folders.output.path}/${
+        config.folders.scripts.path.split(config.folders.site.path)[1]
+      }`
+    );
+  }
+
   if (
     (config.environment.inlineSassOutput || !config.sass.enabled) &&
     !config.folders.styles.copyToOutput
