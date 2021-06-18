@@ -103,6 +103,7 @@ export default class PathsCache {
     });
 
     let compiledScripts: string[] = [];
+
     if (config.typescript.enabled) {
       compiledScripts = [
         `${config.folders.output.path}/**/*.js`,
@@ -111,6 +112,7 @@ export default class PathsCache {
     }
 
     let compiledStyles: string[] = [];
+
     if (config.sass.enabled) {
       compiledStyles = [
         `${config.folders.output.path}/**/*.css`,

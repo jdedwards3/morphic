@@ -197,9 +197,8 @@ export default class Pagination {
           delete paginationPages[page.number].next;
         }
 
-        paginationPages[page.number].pageData = this.pages[
-          page.number - 1
-        ].pageData;
+        paginationPages[page.number].pageData =
+          this.pages[page.number - 1].pageData;
       });
     }
 

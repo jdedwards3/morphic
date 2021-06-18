@@ -110,9 +110,10 @@ export default class ConfigBuilder {
   }
 
   static async updateFilesNotAdded() {
-    ConfigBuilder.instance.config!.notAdded = await ConfigBuilder.instance.getFilesNotTracked(
-      ConfigBuilder.instance.config as IConfig
-    );
+    ConfigBuilder.instance.config!.notAdded =
+      await ConfigBuilder.instance.getFilesNotTracked(
+        ConfigBuilder.instance.config as IConfig
+      );
   }
 
   private async getFilesNotTracked(config: IConfig) {

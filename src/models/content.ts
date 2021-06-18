@@ -230,9 +230,9 @@ export default class Content {
     } else if (model.pagination) {
       dataKeys = ["posts"];
     } else {
-      dataKeys = (Array.isArray(model.data)
-        ? model.data
-        : [model.data]) as string[];
+      dataKeys = (
+        Array.isArray(model.data) ? model.data : [model.data]
+      ) as string[];
     }
 
     this.data = await dataKeys?.reduce(
@@ -271,14 +271,8 @@ export default class Content {
               path: contentPath,
             });
             await contentModel.build(config, archives);
-            const {
-              path,
-              layout,
-              template,
-              renderPath,
-              rawContent,
-              ...keep
-            } = contentModel;
+            const { path, layout, template, renderPath, rawContent, ...keep } =
+              contentModel;
             return keep;
           })
         ))

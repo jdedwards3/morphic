@@ -214,10 +214,10 @@ async function createSitemap(
                           async (path) => {
                             const content = new Content({ path });
                             await content.build(config, archives);
-                            return (new Date(
+                            return new Date(
                               (content.modifiedDate ??
                                 content.createdDate) as string
-                            ) as unknown) as number;
+                            ) as unknown as number;
                           }
                         )
                       )
@@ -283,9 +283,9 @@ async function createSitemap(
               contentPaths.map(async (path) => {
                 const content = new Content({ path: path });
                 await content.build(config, archives);
-                return (new Date(
+                return new Date(
                   (content.modifiedDate ?? content.createdDate) as string
-                ) as unknown) as number;
+                ) as unknown as number;
               })
             )
           )
