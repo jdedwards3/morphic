@@ -165,14 +165,19 @@ export default class Content {
     ) {
       const log = await GitLogCache.getLog(config, this.path);
 
-      this.createdDate = new Date(
-        log.all.slice(-1)[0].date
-      ).toLocaleDateString();
+      const firstLogEntry = log.all.slice(-1)[0];
 
-      this.modifiedDate = new Date(log.latest.date).toLocaleDateString();
+      if (firstLogEntry) {
+        this.createdDate = new Date(firstLogEntry.date).toLocaleDateString();
+      }
+
+      const latestLogEntry = log.latest;
+      if (latestLogEntry) {
+        this.modifiedDate = new Date(latestLogEntry.date).toLocaleDateString();
+      }
     }
 
-    this.createdDate = this.createdDate ?? new Date().toUTCString();
+    this.createdDate = this.createdDate ?? new Date().toLocaleDateString();
 
     this.modifiedDate = this.modifiedDate ?? this.createdDate;
 
