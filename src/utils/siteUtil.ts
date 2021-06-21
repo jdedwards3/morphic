@@ -1,7 +1,7 @@
 import { pathUtil } from "./pathUtil.js";
 import fs from "fs-extra";
 import xml from "xml";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import htmlMinifier from "html-minifier";
 import Content from "../models/content.js";
 import IConfig from "../interfaces/IConfig";
