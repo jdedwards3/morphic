@@ -95,11 +95,11 @@ export default class PathsCache {
     const filePatterns = [
       `${config.folders.output.path}/**/*.html`,
       `${config.folders.output.path}/api/**/*.json`,
-      `${config.folders.output.path}/*.*`,
+      `${config.folders.output.path}/**/*`,
     ];
 
-    const rootFiles = await glob("*", {
-      cwd: `${config.folders.rootFiles.path}`,
+    const publicFiles = await glob("**/*", {
+      cwd: `${config.folders.public.path}`,
     });
 
     let compiledScripts: string[] = [];
@@ -125,7 +125,7 @@ export default class PathsCache {
       ignore: [
         ...compiledScripts,
         ...compiledStyles,
-        ...rootFiles.map((item) => `${config.folders.output.path}/${item}`),
+        ...publicFiles.map((item) => `${config.folders.output.path}/${item}`),
       ],
     });
   }

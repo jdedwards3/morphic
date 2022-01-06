@@ -29,25 +29,23 @@ export default class ConfigBuilder {
       }
 
       const defaultFolders: {
-        [index: string]: IFolder;
+        [index: string]:
+          | IFolder
+          | (IFolder & {
+              typescript: IFolder & { outputFolder: string };
+              sass: IFolder & { outputFolder: string };
+            });
       } = {
-        rootFiles: { path: "rootFiles" },
         content: { path: "content" },
         data: { path: "data" },
-        templates: { path: "templates" },
         layouts: { path: "layouts" },
-        assets: { path: "assets", copyToOutput: false },
-        images: { path: "images", copyToOutput: false },
-        scripts: {
-          path: "scripts",
-          copyToOutput: false,
-          cacheBust: false,
+        public: { path: "public" },
+        src: {
+          path: "src",
+          typescript: { path: "src/typescript", outputFolder: "js" },
+          sass: { path: "src/sass", outputFolder: "css" },
         },
-        styles: {
-          path: "styles",
-          copyToOutput: false,
-          cacheBust: false,
-        },
+        templates: { path: "templates" },
       };
 
       Object.keys(defaultConfig.folders).forEach((key) => {

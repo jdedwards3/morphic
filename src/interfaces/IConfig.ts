@@ -15,15 +15,15 @@ export default interface IConfig {
   saveContentGuid: { enabled: boolean };
   folders: {
     [index: string]: IFolder;
-    rootFiles: IFolder;
+    public: IFolder;
+    src: IFolder & {
+      typescript: IFolder & { outputFolder: string };
+      sass: IFolder & { outputFolder: string };
+    };
     content: IFolder;
     data: IFolder;
     templates: IFolder;
     layouts: IFolder;
-    assets: IFolder;
-    images: IFolder;
-    scripts: IFolder;
-    styles: IFolder;
     output: IFolder;
     site: IFolder;
   };
