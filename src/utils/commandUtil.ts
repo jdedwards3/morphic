@@ -11,7 +11,7 @@ import glob from "fast-glob";
 import { promisify } from "util";
 import { fileURLToPath } from "url";
 import fs from "fs-extra";
-import { cacheBust } from "../cacheBust.js";
+import { versionUtil } from "../utils/versionUtil.js";
 import StyleBuilder from "../models/styleBuilder.js";
 import { dirname } from "path";
 
@@ -86,6 +86,9 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
       await StyleBuilder.resetStyles();
       if (!config.environment.inlineSassOutput) {
         await StyleBuilder.getStyles(config);
+        if (config.sass.versionOutputFolderPath) {
+          await versionUtil.versionFolder(config, config.folders.src.sass);
+        }
       }
     }
 
@@ -94,19 +97,18 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
       path.endsWith(".ejs") ||
       (config.environment.inlineSassOutput && path.endsWith(".scss"))
     ) {
-      await main(config);
+      if (config.sass.enabled && config.sass.versionOutputFolderPath) {
+        await StyleBuilder.resetStyles();
     }
-
-    if (path.endsWith(".scss") && !config.environment.inlineSassOutput) {
-      await cacheBust.folder(config, config.folders.styles);
+      await morphic(config.folders.site.path, config.folders.output.path);
     }
 
     if (config.typescript.enabled && path.endsWith(".ts")) {
       await processScripts(config, typeCheck);
     }
 
-    if (path.endsWith(".ts")) {
-      await cacheBust.folder(config, config.folders.scripts);
+    if (path.endsWith(".ts") && config.typescript.versionOutputFolderPath) {
+      await versionUtil.versionFolder(config, config.folders.src.typescript);
     }
 
     if (reload) {

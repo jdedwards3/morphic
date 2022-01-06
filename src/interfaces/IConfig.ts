@@ -5,10 +5,12 @@ import IFolder from "./IFolder.js";
 export default interface IConfig {
   typescript: {
     enabled: boolean;
+    versionOutputFolderPath: boolean;
     ignoreGlobs: string[];
   };
   sass: {
     enabled: boolean;
+    versionOutputFolderPath: boolean;
   };
   saveContentGuid: { enabled: boolean };
   folders: {
