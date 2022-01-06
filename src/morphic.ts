@@ -1,3 +1,4 @@
+import ConfigBuilder from "./models/configBuilder.js";
 import { siteUtil } from "./utils/siteUtil.js";
 import { renderUtil } from "./utils/renderUtil.js";
 import StyleBuilder from "./models/styleBuilder.js";
@@ -8,6 +9,19 @@ import IArchiveType from "./interfaces/IArchiveType.js";
 import fs from "fs-extra";
 import ContentGuidWriter from "./models/contentGuidWriter.js";
 import ServiceWorkerBuilder from "./models/serviceWorkerBuilder.js";
+import { commandUtil } from "./utils/commandUtil.js";
+import { versionUtil } from "./utils/versionUtil.js";
+import slash from "slash";
+import { ParsedArgs } from "minimist";
+
+async function morphic(input: string, output: string, argv?: ParsedArgs) {
+  const siteFolder = slash(input);
+
+  const outputFolder = slash(output);
+
+  process.env.morphicEnv = process.env.morphicEnv ?? "production";
+
+  const config = await ConfigBuilder.getConfig(siteFolder, outputFolder);
 
   await fs.mkdirs(`${config.folders.output.path}`);
 
@@ -70,15 +84,29 @@ import ServiceWorkerBuilder from "./models/serviceWorkerBuilder.js";
     await siteUtil.createRssFeed(config, contentPaths, archiveTypeDisplayMap);
   }
 
+  await siteUtil.cleanOldOutputFiles(config);
+
+  if (config.typescript.enabled) {
+    await commandUtil.processScripts(config, argv?.typecheck);
+  }
+
   await fs.copy(
+    `${config.folders.public.path}`,
     `${config.folders.output.path}/`,
     { overwrite: true }
   );
 
+  await versionUtil.applyVersioning(config);
 
+  if (argv?.watch) {
+    await commandUtil.watcher(config, argv?.typecheck);
   }
 
+  if (argv?.serve) {
+    await commandUtil.watcher(config, argv?.typecheck, true);
   }
 
+  console.log("File generation complete.");
 }
 
+export { morphic };
