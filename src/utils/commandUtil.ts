@@ -1,7 +1,7 @@
 import IConfig from "../interfaces/IConfig";
 import ContentCache from "../models/contentCache.js";
 import slash from "slash";
-import { main } from "../main.js";
+import { morphic } from "../morphic.js";
 import PathsCache from "../models/pathsCache.js";
 import ConfigBuilder from "../models/configBuilder.js";
 import chokidar from "chokidar";
@@ -40,7 +40,7 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
   });
 
   if (config.typescript.enabled) {
-    watcher.add(`${config.folders.site.path}**/*.ts`);
+    watcher.add(`${config.folders.src.typescript.path}**/*.ts`);
     watcher.unwatch(
       config.typescript.ignoreGlobs.map(
         (item) => `${config.folders.site.path}${item}`
@@ -49,7 +49,7 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
   }
 
   if (config.sass.enabled) {
-    watcher.add(`${config.folders.site.path}**/*.scss`);
+    watcher.add(`${config.folders.src.sass.path}**/*.scss`);
   }
 
   const syncChanges = async (
@@ -99,7 +99,7 @@ async function watcher(config: IConfig, typeCheck: boolean, reload?: boolean) {
     ) {
       if (config.sass.enabled && config.sass.versionOutputFolderPath) {
         await StyleBuilder.resetStyles();
-    }
+      }
       await morphic(config.folders.site.path, config.folders.output.path);
     }
 
@@ -149,12 +149,18 @@ async function processScripts(config: IConfig, typecheck: boolean) {
     if (!result.stderr) {
       await compileClient(config);
       console.log("TypeScript compiled with type checking.");
+      console.log(
+        `TypeScript output copied to ${config.folders.output.path}/${config.folders.src.typescript.outputFolder}`
+      );
     } else {
       console.warn("TypeScript type checking errors. Compilation stopped.");
     }
   } else {
     await compileClient(config);
     console.log("TypeScript compiled without type checking.");
+    console.log(
+      `TypeScript output copied to ${config.folders.output.path}/${config.folders.src.typescript.outputFolder}`
+    );
   }
 }
 
@@ -162,11 +168,14 @@ async function typeCheckScripts(config: IConfig) {
   const result = await exec(
     `npm --prefix ${__dirname}/../../../ run typeCheck-client -- ${(
       await glob("**/*.ts", {
-        cwd: config.folders.site.path,
+        cwd: config.folders.src.typescript.path,
         ignore: config.typescript.ignoreGlobs,
       })
     )
-      .map((path) => `${config.folders.site.path}${path}`)
+      .map(
+        (path) =>
+          `${config.folders.site.path}/${config.folders.src.typescript.path}/${path}`
+      )
       .join(" ")}`
   ).catch((error) => {
     console.error(error.stdout);
@@ -178,7 +187,7 @@ async function typeCheckScripts(config: IConfig) {
 async function compileClient(config: IConfig) {
   const tsFiles = (
     await glob("**/*.ts", {
-      cwd: `${config.folders.site.path}`,
+      cwd: `${config.folders.src.typescript.path}`,
       ignore: config.typescript.ignoreGlobs,
     })
   ).reduce(function (files: string[], file) {
@@ -193,10 +202,8 @@ async function compileClient(config: IConfig) {
     return files;
   }, []);
 
-  await Promise.all(
-    tsFiles.map(async function (file) {
-      await fs.remove(`${config.folders.output.path}/${file}`);
-    })
+  await fs.remove(
+    `${config.folders.output.path}/${config.folders.src.typescript.outputFolder}`
   );
 
   const ignored = config.typescript.ignoreGlobs
@@ -206,8 +213,8 @@ async function compileClient(config: IConfig) {
   await exec(
     `npm --prefix ${__dirname}/../../../ run compile-client ${
       config.environment.minifyTypescriptOutput
-        ? `-- --minified --ignore ${ignored} ${config.folders.site.path} -d ${config.folders.output.path}`
-        : `-- --ignore ${ignored} ${config.folders.site.path} -d ${config.folders.output.path}`
+        ? `-- --minified --ignore ${ignored} ${config.folders.site.path}/${config.folders.src.typescript.path} -d ${config.folders.output.path}/${config.folders.src.typescript.outputFolder}`
+        : `-- --ignore ${ignored} ${config.folders.site.path}/${config.folders.src.typescript.path} -d ${config.folders.output.path}/${config.folders.src.typescript.outputFolder}`
     }`
   );
 }

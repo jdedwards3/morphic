@@ -45,46 +45,48 @@ export default class StyleBuilder {
     if (!StyleBuilder.instance.styles) {
       if (config.environment.inlineSassOutput) {
         const styleResult = await sassRender({
-          file: `${config.folders.styles.path}/styles.scss`,
+          file: `${config.folders.src.sass.path}/index.scss`,
         });
 
         StyleBuilder.instance.styles = `<style>${styleResult.css.toString()}</style>`;
 
         console.log("Inlined SASS output.");
       } else {
-        const styleOutputFolder = config.folders.styles.path.split(
-          config.folders.site.path
-        )[1];
+        await fs.remove(
+          `${config.folders.output.path}/${config.folders.src.sass.outputFolder}`
+        );
 
-        await fs.remove(`${config.folders.output.path}/${styleOutputFolder}`);
-
-        await mkdirs(`${config.folders.output.path}/${styleOutputFolder}`);
+        await mkdirs(
+          `${config.folders.output.path}/${config.folders.src.sass.outputFolder}`
+        );
 
         const styleResult = await sassRender({
-          file: `${config.folders.styles.path}/styles.scss`,
-          outFile: `${config.folders.output.path}/${styleOutputFolder}/styles.css`,
+          file: `${config.folders.src.sass.path}/index.scss`,
+          outFile: `${config.folders.output.path}/${config.folders.src.sass.outputFolder}/index.css`,
           sourceMap: true,
           sourceMapContents: true,
           outputStyle: "compressed",
         });
 
         await writeFile(
-          `${config.folders.output.path}/${styleOutputFolder}/styles.css.map`,
+          `${config.folders.output.path}/${config.folders.src.sass.outputFolder}/index.css.map`,
           styleResult.map,
           "utf8"
         );
 
         await writeFile(
-          `${config.folders.output.path}/${styleOutputFolder}/styles.css`,
+          `${config.folders.output.path}/${config.folders.src.sass.outputFolder}/index.css`,
           styleResult.css,
           "utf8"
         );
 
-        StyleBuilder.instance.styles = config.folders.styles.cacheBust
-          ? `<link href="/${styleOutputFolder}/${config.version}/styles.css" rel="stylesheet" />`
-          : `<link href="/${styleOutputFolder}/styles.css" rel="stylesheet" />`;
+        StyleBuilder.instance.styles = config.sass.versionOutputFolderPath
+          ? `<link href="/${config.folders.src.sass.outputFolder}/${config.version}/index.css" rel="stylesheet" />`
+          : `<link href="/${config.folders.src.sass.outputFolder}/index.css" rel="stylesheet" />`;
 
-        console.log("SASS output copied to styles folder.");
+        console.log(
+          `SASS output copied to ${config.folders.output.path}/${config.folders.src.sass.outputFolder}`
+        );
       }
     }
   }
