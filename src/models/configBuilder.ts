@@ -93,10 +93,12 @@ export default class ConfigBuilder {
         siteName: defaultConfig.siteName ?? "",
         siteDescription: defaultConfig.siteDescription ?? "",
         version: defaultConfig.version ?? "0.0.0",
-        environment: ((defaultConfig as any).environment ??
-          ({ production: { domain: "" }, dev: { domain: "" } } as any))[
-          process.env.morphicEnv as string
-        ] ?? { domain: "" },
+        environment:
+          (defaultConfig as any).environment ??
+          ({
+            production: { domain: "" },
+            dev: { domain: "http://localhost:3000" },
+          } as any),
         notAdded: await ConfigBuilder.instance.getFilesNotTracked({
           folders,
         } as IConfig),

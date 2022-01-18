@@ -19,8 +19,6 @@ async function morphic(input: string, output: string, argv?: ParsedArgs) {
 
   const outputFolder = slash(output);
 
-  process.env.morphicEnv = process.env.morphicEnv ?? "production";
-
   const config = await ConfigBuilder.getConfig(siteFolder, outputFolder);
 
   await fs.mkdirs(`${config.folders.output.path}`);
